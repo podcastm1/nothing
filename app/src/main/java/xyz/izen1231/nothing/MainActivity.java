@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
         Button save =(Button)findViewById(R.id.save);
         save.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/AnimationCapture";
