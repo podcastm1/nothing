@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/AnimationCapture";
+                String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/animationcapture";
                 final RelativeLayout capture = (RelativeLayout) findViewById(R.id.relative);
 
-                String folder ="nothing";
+//                String folder ="nothing";
 
                 File file = new File(path);
                 if(!file.exists()){
@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
 
                 FileOutputStream fos = null;
                 try{
-                    fos = new FileOutputStream(path+"/Capture"+day.format(date)+".jpg");
+                    fos = new FileOutputStream(path+"/capture"+day.format(date)+".jpg");
                     captureview.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path + "/Capture" + day.format(date) + ".JPEG")));
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path + "/capture" + day.format(date) + ".JPEG")));
                     Toast.makeText(MainActivity.this, "저장완료", Toast.LENGTH_SHORT).show();
                     fos.flush();
                     fos.close();
@@ -61,9 +61,10 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                    }
             }
         });
 
     }
 }
+
