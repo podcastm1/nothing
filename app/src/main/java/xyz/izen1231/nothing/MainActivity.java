@@ -1,5 +1,6 @@
 package xyz.izen1231.nothing;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -33,35 +34,34 @@ public class MainActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/animationcapture";
+                File savePath = new File(Environment.getExternalStorageDirectory() , "/king");
+
                 final RelativeLayout capture = (RelativeLayout) findViewById(R.id.relative);
 
-//                String folder ="nothing";
-
-                File file = new File(path);
-                if(!file.exists()){
-                    file.mkdirs();
+                if(!savePath.exists()){
+                    savePath.mkdirs();
                     Toast.makeText(MainActivity.this, "폴더가 생성되었습니다.", Toast.LENGTH_SHORT).show();
                 }
 
-                SimpleDateFormat day = new SimpleDateFormat("yyyyMMddHHmmss");
-                Date date = new Date();
-                capture.buildDrawingCache();
-                Bitmap captureview = capture.getDrawingCache();
+                capture.setDrawingCacheEnabled(true);
+                Bitmap screenBitmap = capture.getDrawingCache();
 
-                FileOutputStream fos = null;
-                try{
-                    fos = new FileOutputStream(path+"/capture"+day.format(date)+".jpg");
-                    captureview.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path + "/capture" + day.format(date) + ".JPEG")));
+                @SuppressLint("SimpleDateFormat") String fileDate = new SimpleDateFormat("yyyy.MM.dd(E) a hh:mm:ss").format(new Date());
+                String filename = fileDate + ".png";
+
+                File file = new File(Environment.getExternalStorageDirectory() + "/king", filename);
+                FileOutputStream os = null;
+
+                try {
+                    os = new FileOutputStream(file);
+                    screenBitmap.compress(Bitmap.CompressFormat.PNG, 90, os); //비트맵을 PNG파일로 변환
                     Toast.makeText(MainActivity.this, "저장완료", Toast.LENGTH_SHORT).show();
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    os.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    }
+                }
+
+                capture.setDrawingCacheEnabled(false);
             }
         });
 
